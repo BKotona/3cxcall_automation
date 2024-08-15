@@ -1,0 +1,42 @@
+using System;
+using System.Threading;
+using TCX.PBXAPI;
+using TCX.Configuration;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Inicializar a conexão com o servidor 3CX
+        var pbx = PhoneSystem.Root;
+
+        // Lista de números para ligar em série
+        string[] numerosDestino = {
+            "01200000000",
+            "01200000000",
+            "01200000000"
+        };
+
+        string fromPhone = "100";  // Extensão de origem
+
+        for (int i = 0; i < numerosDestino.Length; i++)
+        {
+            try
+            {
+                // Criar uma nova chamada
+                var chamada = pbx.CreateCall();
+                chamada.MakeCall(fromPhone, numerosDestino[i]);
+                Console.WriteLine($"Ligação para {numerosDestino[i]} iniciada com sucesso.");
+
+                // Pausa entre as chamadas
+                Thread.Sleep(5000);  // 5 segundos de pausa (ajuste conforme necessário)
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao tentar ligar para {numerosDestino[i]}: {ex.Message}");
+            }
+        }
+
+        Console.WriteLine("Todas as chamadas foram realizadas.");
+    }
+}
